@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
   if (loadFromAnnoyByWord(testIndexPath, testAnnoyPath, testWord, 
     dimensions, loadedVector)) {
 
-    for (int i = 0; i < 40; ++i) {
+    for (int i = 0; i < dimensions; ++i) {
       printf("%f, ", loadedVector[i]);
     }
   }
