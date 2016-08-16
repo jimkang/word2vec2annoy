@@ -2,6 +2,7 @@
 #include "../load-from-annoy-by-word.h"
 #include <string>
 #include <vector>
+#include <assert.h>
 
 char testBinPath[] = "data/text8-vector.bin";
 char testIndexPath[] = "test-index.txt";
@@ -17,6 +18,9 @@ int main(int argc, char **argv) {
 
   if (loadFromAnnoyByWord(testIndexPath, testAnnoyPath, testWord, 
     dimensions, loadedVector)) {
+
+    // Correct number of dimensions should be in loaded vector.
+    assert(dimensions == 200);
 
     for (int i = 0; i < dimensions; ++i) {
       printf("%f, ", loadedVector[i]);
