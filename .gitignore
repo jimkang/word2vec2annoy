@@ -1,0 +1,5 @@
+.DS_Store
+tests/data/*
+tests/*.tree
+tests/*-index.txt
+tests/basic-test
