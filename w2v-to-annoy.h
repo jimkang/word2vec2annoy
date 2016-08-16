@@ -1,22 +1,23 @@
 #include <stdio.h>
-// #include <stdlib.h>
 #include "annoylib.h"
 #include <vector>
 
 const long long max_w = 2000;
-const int dimensions = 40;
 
-void w2vToAnnoy(char *binPath, char *wordIndexPath, char *annoyPath) {
+void w2vToAnnoy(char *binPath, char *wordIndexPath,
+  char *annoyPath, long long *numberOfDimensionsPerVector) {
+
   FILE * fi = fopen(binPath, "rb");
   FILE * fWordIndex = fopen(wordIndexPath, "wb");
   
-  long long words, size;
+  long long words, dimensions;
   fscanf(fi, "%lld", &words);
-  fscanf(fi, "%lld", &size);
+  fscanf(fi, "%lld", &dimensions);
   fscanf(fi, "%*[ ]");
   fscanf(fi, "%*[\n]");
 
-  // printf("%lld %lld\n", words, size);
+  // printf("dimensions: %lld\n", dimensions);
+  *numberOfDimensionsPerVector = dimensions;
 
   char word[max_w];
   char ch;
@@ -34,25 +35,20 @@ void w2vToAnnoy(char *binPath, char *wordIndexPath, char *annoyPath) {
     fscanf(fi, "%[^ ]", word);
     fscanf(fi, "%c", &ch);
 
-    // printf("%s ", word);
     fprintf(fWordIndex, "%s:%d\n", word, b);
 
-    // float *vec = (float *) malloc(dimensions * sizeof(float));
     std::vector<float> vec(dimensions);
+    // printf("Number of members of vec initially: %lu\n", vec.size());
 
-    for (a = 0; a < size; a++) {
+    for (a = 0; a < dimensions; a++) {
       fread(&value, sizeof(float), 1, fi);
-      // printf("%lf ", value);
-      // vec[a] = value;
-      vec.push_back(value);
+      vec[a] = value;
+      // printf("%lf ", vec[a]);
     }
     fscanf(fi, "%*[\n]");
 
+    // printf("Number of members of vec: %lu\n", vec.size());
     annoy.add_item(b, vec.data());
-    // free(vec);
-    // printf("\n");
-
-    // printf("Adding item %d\n", b);
   }
 
 

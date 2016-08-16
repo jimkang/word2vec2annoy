@@ -319,8 +319,10 @@ public:
     n->children[1] = 0;
     n->n_descendants = 1;
 
-    for (int z = 0; z < _f; z++)
+    for (int z = 0; z < _f; z++) {
       n->v[z] = w[z];
+      // printf("adding: %f", w[z]);
+    }
 
     if (item >= _n_items)
       _n_items = item + 1;
@@ -450,10 +452,10 @@ public:
 
   void get_item(S item, T* v) {
     Node* m = _get(item);
-    printf("Copying item!");
-    for (int i = 0; i < _f; ++i) {
-      printf("%f, ", m->v[i]);
-    }
+    // printf("Copying item!");
+    // for (int i = 0; i < _f; ++i) {
+    //   printf("%f, ", m->v[i]);
+    // }
     std::copy(&m->v[0], &m->v[_f], v);
   }
 
