@@ -1,12 +1,6 @@
-# CC = gcc
 CC = g++
-CFLAGS = -lm -pthread -Ofast -march=native -Wall -funroll-loops -Wno-unused-result
+CFLAGS = -lm -pthread -Ofast -march=native -Wall -funroll-loops -Wno-unused-result -std=c++11
 TESTDATADIR = tests/data
-
-all: build-annoy
-
-build-annoy:
-	g++ precision_test.cpp -o precision_test -std=c++11
 
 tests/basic-test:
 	$(CC) tests/basic-test.c -o tests/basic-test $(CFLAGS)
