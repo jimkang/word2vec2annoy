@@ -10,7 +10,9 @@ rebuild-test:
 	$(CC) tests/basic-test.c -o tests/basic-test $(CFLAGS)
 
 test: rebuild-test tests/data/text8-vector.bin
-	cd tests && ./basic-test
+	cd tests && \
+	./basic-test data/text8-vector.bin test-word-index.txt test-annoy.tree \
+	big dog
 
 tests/data/text8-vector.bin:
 	wget https://dl.dropboxusercontent.com/u/263768/text8-vector.bin -O $(TESTDATADIR)/text8-vector.bin

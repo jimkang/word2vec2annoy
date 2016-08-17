@@ -7,14 +7,7 @@
 #include "../get-word-for-index.h"
 #include "../annoylib.h"
 
-char testBinPath[] = "data/text8-vector.bin";
-char testIndexPath[] = "test-index.txt";
-char testAnnoyPath[] = "test-annoy.tree";
-
 char testWord[] = "platypus";
-
-char nnsTestWord1[] = "natural";
-char nnsTestWord2[] = "house";
 
 void printVector(float *vector, int dimensions) {
   for (int i = 0; i < dimensions; ++i) {
@@ -23,11 +16,11 @@ void printVector(float *vector, int dimensions) {
   printf("\n");
 }
 
-void printIndexes(std::vector<int> indexes) {
+void printIndexes(std::vector<int> indexes, char *wordIndexPath) {
   for (std::vector<int>::iterator index = indexes.begin(); index!=indexes.end(); ++index) {
     printf("%d, ", *index);
     char foundWord[2000];
-    getWordForIndex(testIndexPath, *index, foundWord);
+    getWordForIndex(wordIndexPath, *index, foundWord);
     printf("%s\n", foundWord);
   }
   printf("\n");
@@ -45,16 +38,19 @@ void subtractVectors(float *a, float *b, float *difference, int dimensions) {
   }
 }
 
-void testFindingNeighbor(long long dimensions) {
-  int index1 = getIndexForWord(testIndexPath, nnsTestWord1);
-  int index2 = getIndexForWord(testIndexPath, nnsTestWord2);
+void testFindingNeighbor(long long dimensions, 
+  char *wordIndexPath, char *annoyIndexPath,
+  char *nnsTestWord1, char *nnsTestWord2) {
+
+  int index1 = getIndexForWord(wordIndexPath, nnsTestWord1);
+  int index2 = getIndexForWord(wordIndexPath, nnsTestWord2);
   printf("index1: %d, index2: %d\n", index1, index2);
   
   AnnoyIndex<int, float, Angular, RandRandom> annoy =
     AnnoyIndex<int, float, Angular, RandRandom>(dimensions);
   // annoy.verbose(true);
   
-  bool loaded = annoy.load(testAnnoyPath);
+  bool loaded = annoy.load(annoyIndexPath);
   assert(loaded);
 
   float vector1[dimensions];
@@ -71,16 +67,27 @@ void testFindingNeighbor(long long dimensions) {
 
   std::vector<int> closest;
   annoy.get_nns_by_vector(sum, 10, -1, &closest, nullptr);
-  printIndexes(closest);
+  printIndexes(closest, wordIndexPath);
 }
 
 int main(int argc, char **argv) {
+  if (argc < 6) {
+    printf("Usage: basic-test <bin path> <word index path> <annoy index path> <add word 1> <add word 2>\n");
+    return -1;
+  }
+
+  char *testBinPath = argv[1];
+  char *wordIndexPath = argv[2];
+  char *annoyIndexPath = argv[3];
+  char *nnsTestWord1 = argv[4];
+  char *nnsTestWord2 = argv[5];
+
   long long dimensions;
-  w2vToAnnoy(testBinPath, testIndexPath, testAnnoyPath, &dimensions);
+  w2vToAnnoy(testBinPath, wordIndexPath, annoyIndexPath, &dimensions);
 
   float loadedVector[dimensions];
 
-  if (loadFromAnnoyByWord(testIndexPath, testAnnoyPath, testWord, 
+  if (loadFromAnnoyByWord(wordIndexPath, annoyIndexPath, testWord, 
     dimensions, loadedVector)) {
 
     // Correct number of dimensions should be in loaded vector.
@@ -91,5 +98,7 @@ int main(int argc, char **argv) {
     printf("Could not load vector!\n");
   }
 
-  testFindingNeighbor(dimensions);
+  testFindingNeighbor(dimensions, wordIndexPath, annoyIndexPath,
+    nnsTestWord1, nnsTestWord2
+  );
 }
