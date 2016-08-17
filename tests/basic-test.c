@@ -13,8 +13,8 @@ char testAnnoyPath[] = "test-annoy.tree";
 
 char testWord[] = "platypus";
 
-char nnsTestWord1[] = "loud";
-char nnsTestWord2[] = "machine";
+char nnsTestWord1[] = "natural";
+char nnsTestWord2[] = "house";
 
 void printVector(float *vector, int dimensions) {
   for (int i = 0; i < dimensions; ++i) {
