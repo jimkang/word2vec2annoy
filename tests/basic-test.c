@@ -10,6 +10,19 @@ char testAnnoyPath[] = "test-annoy.tree";
 
 char testWord[] = "platypus";
 
+void printVector(float *vector, int dimensions) {
+  for (int i = 0; i < dimensions; ++i) {
+    printf("%f, ", vector[i]);
+  }
+}
+
+void testFindingNeighbor() {
+  // get two indexes by word
+  // get vectors for those indexes
+  // add those vectors
+  // get nns for the sum
+}
+
 int main(int argc, char **argv) {
   long long dimensions;
   w2vToAnnoy(testBinPath, testIndexPath, testAnnoyPath, &dimensions);
@@ -21,10 +34,7 @@ int main(int argc, char **argv) {
 
     // Correct number of dimensions should be in loaded vector.
     assert(dimensions == 200);
-
-    for (int i = 0; i < dimensions; ++i) {
-      printf("%f, ", loadedVector[i]);
-    }
+    printVector(loadedVector, dimensions);
   }
   else {
     printf("Could not load vector!\n");
