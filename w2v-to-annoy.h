@@ -5,7 +5,8 @@
 const long long max_w = 2000;
 
 void w2vToAnnoy(char *binPath, char *wordIndexPath,
-  char *annoyPath, long long *numberOfDimensionsPerVector) {
+  char *annoyPath, int numberOfTrees,
+  long long *numberOfDimensionsPerVector) {
 
   FILE * fi = fopen(binPath, "rb");
   FILE * fWordIndex = fopen(wordIndexPath, "wb");
@@ -53,7 +54,7 @@ void w2vToAnnoy(char *binPath, char *wordIndexPath,
 
 
   printf("Building trees...\n");
-  annoy.build(10);
+  annoy.build(numberOfTrees);
 
   printf("Saving index.\n");
   annoy.save(annoyPath);

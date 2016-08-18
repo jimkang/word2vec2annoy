@@ -71,34 +71,36 @@ void testFindingNeighbor(long long dimensions,
 }
 
 int main(int argc, char **argv) {
-  if (argc < 6) {
-    printf("Usage: basic-test <bin path> <word index path> <annoy index path> <add word 1> <add word 2>\n");
+  if (argc < 7) {
+    printf("Usage: basic-test <bin path> <word index path> <annoy index path> <number of trees> <add word 1> <add word 2>\n");
     return -1;
   }
 
   char *testBinPath = argv[1];
   char *wordIndexPath = argv[2];
   char *annoyIndexPath = argv[3];
-  char *nnsTestWord1 = argv[4];
-  char *nnsTestWord2 = argv[5];
+  int numberOfTrees = atoi(argv[4]);
+  char *nnsTestWord1 = argv[5];
+  char *nnsTestWord2 = argv[6];
 
   long long dimensions;
-  w2vToAnnoy(testBinPath, wordIndexPath, annoyIndexPath, &dimensions);
+  w2vToAnnoy(
+    testBinPath, wordIndexPath, annoyIndexPath, numberOfTrees, &dimensions
+  );
 
   float loadedVector[dimensions];
 
   if (loadFromAnnoyByWord(wordIndexPath, annoyIndexPath, testWord, 
     dimensions, loadedVector)) {
 
-    // Correct number of dimensions should be in loaded vector.
-    assert(dimensions == 200);
     printVector(loadedVector, dimensions);
   }
   else {
     printf("Could not load vector!\n");
   }
 
-  testFindingNeighbor(dimensions, wordIndexPath, annoyIndexPath,
+  testFindingNeighbor(
+    dimensions, wordIndexPath, annoyIndexPath,
     nnsTestWord1, nnsTestWord2
   );
 }
