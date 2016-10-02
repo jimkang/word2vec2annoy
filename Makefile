@@ -28,3 +28,6 @@ tools/get-dimensions-in-vector-bin:
 
 tools/add-vectors:
 	$(CC) tools/add-vectors.c -o tools/add-vectors $(CFLAGS)
+
+tools/w2v-to-json:
+	$(CC) tools/w2v-to-json.c -o tools/w2v-to-json $(CFLAGS)
